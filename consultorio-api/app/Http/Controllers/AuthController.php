@@ -4,7 +4,9 @@ namespace App\Http\Controllers;
 use App\Models\User;
 use App\Models\Roles;
 use Illuminate\Http\Request;
+use Illuminate\Http\Response;
 use Illuminate\Support\Facades\Hash;
+use Illuminate\Support\Facades\Auth;
 
 
 class AuthController extends Controller
@@ -22,8 +24,7 @@ class AuthController extends Controller
                 'Error' => 'Bad Credentials',
             ], 401 );
         }
-        $token           = $user->createToken( 'myapptoken' )->plainTextToken;
-
+        $token = $user->createToken( 'myapptoken' )->plainTextToken;
         return response()->json( [
             'data' => [
                 'user'  => $user,
@@ -34,12 +35,8 @@ class AuthController extends Controller
 
     public function logout( Request $request ) {
         $user = auth()->user();
+        return response()->json($user, 200);
         auth()->user()->tokens()->delete();
-
-        /*
-         * Log Log out
-         */
-        UserLog::create( ['user_id' => $user->id, 'action' => 'verify_email', 'userlog_previous_id' => UserLog::orderBy( 'created_at', 'desc' )->where( 'user_id', $user->id )->first() ? UserLog::orderBy( 'created_at', 'desc' )->where( 'user_id', $user->id )->first()->id : null] );
 
         return response()->json( [
             'data' => [
@@ -59,11 +56,6 @@ class AuthController extends Controller
         $user->email_verified_at = Carbon::now();
         $user->verification_code = null;
         $user->save();
-
-        /*
-         * Log Verify
-         */
-        UserLog::create( ['user_id' => $user->id, 'action' => 'verify_email', 'userlog_previous_id' => UserLog::orderBy( 'created_at', 'desc' )->where( 'user_id', $user->id )->first() ? UserLog::orderBy( 'created_at', 'desc' )->where( 'user_id', $user->id )->first()->id : null] );
 
         return response()->json( [
             'data' => [
