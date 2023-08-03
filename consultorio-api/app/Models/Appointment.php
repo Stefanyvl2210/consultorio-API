@@ -8,6 +8,7 @@ use Illuminate\Database\Eloquent\Model;
 class Appointment extends Model
 {
     use HasFactory;
+    protected $table = "appointment";
     protected $fillable = [
         'patient_id',
         'doctor_id',
@@ -25,6 +26,10 @@ class Appointment extends Model
     public function appointmentStatus()
     {
         return $this->belongsTo(AppointmentStatus::class);
+    }
+    public function appointmentType()
+    {
+        return $this->belongsTo(AppointmentType::class);
     }
     public function surveys()
     {

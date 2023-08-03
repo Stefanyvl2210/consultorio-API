@@ -21,7 +21,7 @@ return new class extends Migration
             $table->foreignId('survey_id')->constrained('survey');
             $table->date('date');
             $table->timestamp('time');
-            $table->boolean('type')->nullable()->default(false);
+            $table->foreignId('type')->constrained('appointment_type');
             $table->foreignId('status')->constrained('appointment_status');
         });
     }

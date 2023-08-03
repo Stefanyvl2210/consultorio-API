@@ -20,12 +20,17 @@ Route::post( '/register', [UserController::class, 'store'] );
 Route::post( '/login', [AuthController::class, 'login'] );
 
 
-Route::put( '/appointment/{date}/{time}', [AppointmentController::class, 'create'] );
 
-Route::middleware(['auth', 'sanctum'])->group(function () {
+Route::group( ['middleware' => ['auth:sanctum']], function () {
     Route::post( '/logout', [AuthController::class, 'logout'] );
 
     Route::get( '/users', [UserController::class, 'index'] );
     Route::put( '/user/{id}', [UserController::class, 'update'] );
     Route::delete( '/user/{id}', [UserController::class, 'destroy'] );
+
+    Route::put( '/appointment/{date}/{time}/{type}/{treatment}', [AppointmentController::class, 'create'] );
+    Route::get( '/appointments', [AppointmentController::class, 'index'] );
+    Route::get( '/appointment/{id}', [AppointmentController::class, 'show'] );
+    Route::put( '/appointment/{id}', [AppointmentController::class, 'update'] );
+    Route::delete( '/appointment/{id}', [AppointmentController::class, 'destroy'] );
 });
