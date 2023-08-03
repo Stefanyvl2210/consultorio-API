@@ -5,6 +5,8 @@ use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\UserController;
 use App\Http\Controllers\AuthController;
 use App\Http\Controllers\AppointmentController;
+use App\Http\Controllers\TreatmentController;
+use App\Http\Controllers\InventoryItemController;
 /*
 |--------------------------------------------------------------------------
 | API Routes
@@ -33,4 +35,11 @@ Route::group( ['middleware' => ['auth:sanctum']], function () {
     Route::get( '/appointment/{id}', [AppointmentController::class, 'show'] );
     Route::put( '/appointment/{id}', [AppointmentController::class, 'update'] );
     Route::delete( '/appointment/{id}', [AppointmentController::class, 'destroy'] );
+
+
+    // Nuevas rutas para manejar tratamientos e insumos médicos
+    // Route::get('/treatments', [TreatmentController::class, 'index']);
+    // Route::get('/inventory', [InventoryItemController::class, 'index']);
+    Route::resource('treatments', TreatmentController::class);
+    Route::resource('inventory', InventoryItemController::class);
 });
