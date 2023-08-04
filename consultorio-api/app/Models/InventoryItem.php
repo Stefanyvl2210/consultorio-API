@@ -2,12 +2,13 @@
 
 namespace App\Models;
 
-// use Illuminate\Contracts\Auth\MustVerifyEmail;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Notifications\Notifiable;
 use Laravel\Sanctum\HasApiTokens;
+use Illuminate\Database\Eloquent\Model;
 
-class InventoryItem extends Authenticatable
+
+class InventoryItem extends Model
 {
     use HasApiTokens, HasFactory, Notifiable;
 
@@ -16,6 +17,10 @@ class InventoryItem extends Authenticatable
      *
      * @var array<int, string>
      */
+
+    //Especificamos el nombre de la tabla
+    protected $table = 'inventory_item'; 
+
     protected $fillable = [
         'name',
         'quantity'

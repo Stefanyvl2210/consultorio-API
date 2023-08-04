@@ -2,78 +2,126 @@
 
 namespace App\Http\Controllers;
 
-use Illuminate\Http\Request;
-use Auth;
 use App\Models\InventoryItem;
+use Illuminate\Http\Request;
+use Illuminate\Http\Response;
 
 class InventoryItemController extends Controller
 {
+    /**
+     * Display a listing of the resource.
+     *
+     * @return \Illuminate\Http\Response
+     */
     public function index()
     {
-        // Verificar si el usuario está autenticado
-        if (Auth::check()) {
-            // Obtener el usuario logeado
-            $user = Auth::user();
+        // Obtener todos los items del inventario de la tabla
+        $inventoryItems = InventoryItem::all();
 
-            // Aquí obtenemos los insumos médicos asociados al usuario (doctora o paciente)
-            $insumos = $user->inventoryItems;
+        // Crear un array para almacenar los datos de los items del inventario
+        $inventoryItemsArray = [];
 
-            return response()->json($insumos);
-        } else {
-            // El usuario no está logueado, redirigirlo a la página de inicio de sesión
-            return redirect('/login');
+        // Recorrer cada item del inventario y agregar sus datos al array
+        foreach ($inventoryItems as $item) {
+            $inventoryItemsArray[] = [
+                'id' => $item->id,
+                'name' => $item->name,
+                'quantity' => $item->quantity,
+            ];
         }
+
+        // Retornar el array con todos los items del inventario
+        return response()->json($inventoryItemsArray);
     }
 
+    /**
+     * Store a newly created resource in storage.
+     *
+     * @param  \Illuminate\Http\Request  $request
+     * @return \Illuminate\Http\Response
+     */
     public function store(Request $request)
     {
-        // Validar los datos enviados por el formulario
-        $request->validate([
-            'name' => 'required|string|max:255',
-            'quantity' => 'required|integer|min:0',
+        $validatedData = $request->validate([
+            'name' => 'required|string',
+            'quantity' => 'required|integer',
         ]);
 
-        // Crear un nuevo insumo médico asociado al usuario logueado
-        $insumo = Auth::user()->inventoryItems()->create([
-            'name' => $request->name,
-            'quantity' => $request->quantity,
-        ]);
-
-        return response()->json($insumo, 201);
+        $inventoryItem = InventoryItem::create($validatedData);
+        return response()->json(['data' => $inventoryItem], Response::HTTP_CREATED);
     }
 
+    /**
+     * Display the specified resource.
+     *
+     * @param  \App\Models\InventoryItem  $inventoryItem
+     * @return \Illuminate\Http\Response
+     */
     public function show($id)
     {
-        // Obtener un insumo médico específico asociado al usuario logueado
-        $insumo = Auth::user()->inventoryItems()->findOrFail($id);
+        // Buscar el tratamiento por su ID en la tabla
+        $item = InventoryItem::find($id);
 
-        return response()->json($insumo);
+        // Verificar si el tratamiento existe
+        if (!$item) {
+            return response()->json(['error' => 'item not found'], Response::HTTP_NOT_FOUND);
+        }
+
+        // Retornar los datos del tratamiento
+        return response()->json($item);
+
     }
 
+    /**
+     * Update the specified resource in storage.
+     *
+     * @param  \Illuminate\Http\Request  $request
+     * @param  \App\Models\InventoryItem  $inventoryItem
+     * @return \Illuminate\Http\Response
+     */
     public function update(Request $request, $id)
     {
-        // Validar los datos enviados por el formulario
-        $request->validate([
-            'name' => 'required|string|max:255',
-            'quantity' => 'required|integer|min:0',
+
+        // Encuentra el item específico por su ID.
+        $inventoryItem = InventoryItem::find($id);
+        
+        if (!$inventoryItem) {
+            return response()->json(['error' => 'Item not found'], 404);
+        }
+
+        // Valida los datos del formulario enviado.
+        $validatedData = $request->validate([
+            'name' => 'required|string',
+            'quantity' => 'required|integer',
         ]);
 
-        // Actualizar un insumo médico específico asociado al usuario logueado
-        $insumo = Auth::user()->inventoryItems()->findOrFail($id);
-        $insumo->update([
-            'name' => $request->name,
-            'quantity' => $request->quantity,
-        ]);
+        // Actualiza los atributos del modelo "InventoryItem" con los datos validados.
+        $inventoryItem->update($validatedData);
 
-        return response()->json($insumo);
+        // Redirecciona a la página de detalles del tratamiento actualizado.
+        return redirect()->route('inventory.show', ['inventory' => $inventoryItem->id])
+            ->with('success', 'Item updated successfully.');
+
     }
 
+    /**
+     * Remove the specified resource from storage.
+     *
+     * @param  \App\Models\InventoryItem  $inventoryItem
+     * @return \Illuminate\Http\Response
+     */
     public function destroy($id)
     {
-        // Eliminar un insumo médico específico asociado al usuario logueado
-        $insumo = Auth::user()->inventoryItems()->findOrFail($id);
-        $insumo->delete();
+        // Encuentra el tratamiento específico por su ID.
+        $inventoryItem = InventoryItem::find($id);
+        
+        if (!$inventoryItem) {
+            return response()->json(['error' => 'Item not found'], 404);
+        }
 
-        return response()->json(null, 204);
+        $inventoryItem->delete();
+
+        return redirect()->route('inventory.index')
+            ->with('success', 'Item successfully removed.');
     }
 }
