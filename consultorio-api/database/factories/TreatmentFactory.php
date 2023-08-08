@@ -17,9 +17,11 @@ class TreatmentFactory extends Factory
     public function definition()
     {
         return [
-            'duration' => fake()->numberBetween($min = 1, $max = 4),
             'name' => fake()->sentence($nbWords = 4, $variableNbWords = true),
-            'description'=>fake()->realText($maxNbChars = 200, $indexSize = 2)
+            'description'=>fake()->realText($maxNbChars = 200, $indexSize = 2),
+            'protocols'=>fake()->realText($maxNbChars = 50, $indexSize = 4),
+            'cost'=>fake()->numberBetween($min = 10, $max = 100),
+            'duration' => fake()->numberBetween($min = 1, $max = 4),
         ];
     }
 }

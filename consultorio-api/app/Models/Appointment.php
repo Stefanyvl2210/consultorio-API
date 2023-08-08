@@ -24,14 +24,7 @@ class Appointment extends Model
     {
         return $this->belongsTo(Users::class);
     }
-    public function appointmentStatus()
-    {
-        return $this->belongsTo(AppointmentStatus::class);
-    }
-    public function appointmentType()
-    {
-        return $this->belongsTo(AppointmentType::class);
-    }
+
     public function surveys()
     {
         return $this->hasOne(Survey::class);

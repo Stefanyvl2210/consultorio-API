@@ -10,10 +10,11 @@ class Treatment extends Model
     use HasFactory;
     protected $table = "treatment";
     protected $fillable = [
-        'duration',
         'name',
+        'description',
         'protocols',
-        'description'
+        'cost',
+        'duration'
     ];
     public function treatments()
     {

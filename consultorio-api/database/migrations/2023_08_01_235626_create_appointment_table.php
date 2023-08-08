@@ -18,11 +18,13 @@ return new class extends Migration
             $table->foreignId('patient_id')->constrained('users');
             $table->foreignId('doctor_id')->constrained('users');
             $table->foreignId('treatment_id')->constrained('treatment');
-            $table->foreignId('survey_id')->constrained('survey');
             $table->date('date');
-            $table->timestamp('time');
-            $table->foreignId('type')->constrained('appointment_type');
-            $table->foreignId('status')->constrained('appointment_status');
+            $table->time('start_time');
+            $table->time('end_time');
+            $table->enum('type', ['Cita Previa', 'Cita Formal'])->nullable();
+            $table->enum('status', ['Pendiente', 'Aceptada', 'Rechazada', 'Cancelada'])->default('Pendiente');
+            $table->foreignId('survey_id')->constrained('survey');
+            $table->timestamps();
         });
     }
 
