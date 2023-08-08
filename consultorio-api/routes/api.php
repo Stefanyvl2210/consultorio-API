@@ -6,6 +6,8 @@ use App\Http\Controllers\UserController;
 use App\Http\Controllers\AuthController;
 use App\Http\Controllers\AppointmentController;
 use App\Http\Controllers\SurveyController;
+use App\Http\Controllers\TreatmentController;
+use App\Http\Controllers\InventoryItemController;
 /*
 |--------------------------------------------------------------------------
 | API Routes
@@ -18,13 +20,13 @@ use App\Http\Controllers\SurveyController;
 */
 
 Route::post( '/register', [UserController::class, 'store'] );
-Route::post( '/login', [AuthController::class, 'login'] );
-
-
+// Route::get( '/login', [AuthController::class, 'login'] )->name("api.login");
+Route::post( '/login', [AuthController::class, 'login']);
 
 Route::group( ['middleware' => ['auth:sanctum']], function () {
     Route::post( '/logout', [AuthController::class, 'logout'] );
 
+    //TODO No funciona el redireccionamiento cuando el usuario no esta logeado
     Route::get( '/users', [UserController::class, 'index'] );
     Route::put( '/user/{id}', [UserController::class, 'update'] );
     Route::delete( '/user/{id}', [UserController::class, 'destroy'] );
@@ -40,4 +42,7 @@ Route::group( ['middleware' => ['auth:sanctum']], function () {
     Route::get('/surveys', [SurveyController::class, 'index']);
     Route::get('/survey/{id}', [SurveyController::class, 'show']);
     Route::put('/survey/{id}', [SurveyController::class, 'update']);
+    // Nuevas rutas para manejar tratamientos e insumos médicos
+    Route::resource('treatments', TreatmentController::class);
+    Route::resource('inventory', InventoryItemController::class);
 });
