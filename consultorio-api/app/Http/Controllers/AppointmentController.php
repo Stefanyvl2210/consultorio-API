@@ -35,17 +35,17 @@ class AppointmentController extends Controller
     }
 
     public function appmtData($appointment){
-            $data['patient']=User::where('id', $appointment['patient_id'])->first()['first_name']. " ";
-            $data['patient'].=User::where('id', $appointment['patient_id'])->first()['last_name'];
-            $data['doctor']=User::where('id', $appointment['doctor_id'])->first()['first_name'] . " ";
-            $data['doctor'].=User::where('id', $appointment['doctor_id'])->first()['last_name'];
-            $data['treatment']=Treatment::where('id', $appointment['treatment_id'])->first()['name'];
-            $data['status']=AppointmentStatus::where('id', $appointment['status'])->first()['name'];
-            $data['type']=AppointmentType::where('id', $appointment['type'])->first()['name'];
-            $data['date']=$appointment['date'];
-            $data['start_time']=$appointment['start_time'];
-            $data['end_time']=$appointment['end_time'];
-            return $data;
+        $data['patient']=User::where('id', $appointment['patient_id'])->first()['first_name']. " ";
+        $data['patient'].=User::where('id', $appointment['patient_id'])->first()['last_name'];
+        $data['doctor']=User::where('id', $appointment['doctor_id'])->first()['first_name'] . " ";
+        $data['doctor'].=User::where('id', $appointment['doctor_id'])->first()['last_name'];
+        $data['treatment']=Treatment::where('id', $appointment['treatment_id'])->first()['name'];
+        $data['date']=$appointment['date'];
+        $data['start_time']=$appointment['start_time'];
+        $data['end_time']=$appointment['end_time'];
+        $data['type']=$appointment['type'];
+        $data['status']=$appointment['status'];
+        return $data;
     }
 
     /**
@@ -56,7 +56,6 @@ class AppointmentController extends Controller
     public function create($date, $time, $type, $treatment)
     {
         $survey=Survey::create(["appointment_date"=>$date, "", false]);
-        $status = AppointmentStatus::where('name', 'Pendiente')->first();
         $treatment = Treatment::where('id', $treatment)->first();
         $user = auth()->user();
         $doctor = User::where('role_id',1)->first();
@@ -64,16 +63,20 @@ class AppointmentController extends Controller
             "patient_id"=>$user['id'],
             "doctor_id"=>$doctor['id'],
             "treatment_id"=>$treatment['id'],
-            "survey_id"=>$survey['id'],
             "date"=>$date,
             "start_time"=>$time,
             "end_time"=>date('H:i:s', strtotime($time . ' + ' . $treatment['duration'] .' hours')),
             "type"=>$type,
-            "status"=>$status['id']
+            "status"=>'Pendiente',
+            "survey_id"=>$survey['id']
         ];
+        $existing = Appointment::where('date', $data['date'])->where('start_time', $data['start_time'])->first();
         try {
-            $appointment = Appointment::create( $data );
-
+            if(!isset($existing)){
+                $appointment = Appointment::create( $data );
+            }else{
+                return response()->json("HORA DEL DIA YA FUE RESERVADA", 200);
+            }
         } catch ( \Throwable $e ) {
             return response( $e, 500 );
         }
@@ -90,16 +93,12 @@ class AppointmentController extends Controller
     {
         try {
             $appointment = Appointment::where('patient_id', $id)->get();
-            if(sizeof($appointment)>1){
-                $response = [];
-                foreach ($appointment as $app) {
-                    $data = $this->appmtData($app);
-                    array_push($response, $data);
-                }
-                return response()->json($response, 200);
-            }else{
-                return response()->json($appointment, 200);
+            $response = [];
+            foreach ($appointment as $app) {
+                $data = $this->appmtData($app);
+                array_push($response, $data);
             }
+            return response()->json($response, 200);
         } catch (\Throwable $th) {
             return response( $e, 500 );
         }

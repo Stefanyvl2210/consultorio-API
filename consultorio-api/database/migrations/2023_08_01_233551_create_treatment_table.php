@@ -15,10 +15,11 @@ return new class extends Migration
     {
         Schema::create('treatment', function (Blueprint $table) {
             $table->id();
-            $table->integer('duration');
             $table->string('name');
-            $table->enum('protocols', ['Ninguno']);
-            $table->string('description');
+            $table->text('description');
+            $table->text('protocols');
+            $table->double('cost');
+            $table->integer('duration');
             $table->timestamps();
         });
     }
