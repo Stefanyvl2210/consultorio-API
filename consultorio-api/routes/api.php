@@ -26,7 +26,9 @@ Route::post( '/login', [AuthController::class, 'login']);
 Route::group( ['middleware' => ['auth:sanctum']], function () {
     Route::post( '/logout', [AuthController::class, 'logout'] );
 
-    //TODO No funciona el redireccionamiento cuando el usuario no esta logeado
+    //NADA funciona el redireccionamiento cuando el usuario no esta logeado
+    //En caso de utilizar postman se debe logear el usuario y copiar el token
+    //y pegarlo en la autorizacion Bearer Token para cada request
     Route::get( '/users', [UserController::class, 'index'] );
     Route::put( '/user/{id}', [UserController::class, 'update'] );
     Route::delete( '/user/{id}', [UserController::class, 'destroy'] );
