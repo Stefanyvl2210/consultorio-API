@@ -15,7 +15,8 @@ class Appointment extends Model
         'treatment_id',
         'survey_id',
         'date',
-        'time',
+        'start_time',
+        'end_time',
         'type',
         'status'
     ];

@@ -5,6 +5,7 @@ use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\UserController;
 use App\Http\Controllers\AuthController;
 use App\Http\Controllers\AppointmentController;
+use App\Http\Controllers\SurveyController;
 /*
 |--------------------------------------------------------------------------
 | API Routes
@@ -33,4 +34,10 @@ Route::group( ['middleware' => ['auth:sanctum']], function () {
     Route::get( '/appointment/{id}', [AppointmentController::class, 'show'] );
     Route::put( '/appointment/{id}', [AppointmentController::class, 'update'] );
     Route::delete( '/appointment/{id}', [AppointmentController::class, 'destroy'] );
+
+    Route::get( '/unavailability/{date}', [AppointmentController::class, 'unavailability'] );
+
+    Route::get('/surveys', [SurveyController::class, 'index']);
+    Route::get('/survey/{id}', [SurveyController::class, 'show']);
+    Route::put('/survey/{id}', [SurveyController::class, 'update']);
 });

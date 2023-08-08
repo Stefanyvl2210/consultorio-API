@@ -43,7 +43,8 @@ class AppointmentController extends Controller
             $data['status']=AppointmentStatus::where('id', $appointment['status'])->first()['name'];
             $data['type']=AppointmentType::where('id', $appointment['type'])->first()['name'];
             $data['date']=$appointment['date'];
-            $data['time']=$appointment['time'];
+            $data['start_time']=$appointment['start_time'];
+            $data['end_time']=$appointment['end_time'];
             return $data;
     }
 
@@ -54,8 +55,6 @@ class AppointmentController extends Controller
      */
     public function create($date, $time, $type, $treatment)
     {
-        //$date = date('Y-m-d', strtotime($date));
-        //$time = date('h:m:s', strtotime($time));
         $survey=Survey::create(["appointment_date"=>$date, "", false]);
         $status = AppointmentStatus::where('name', 'Pendiente')->first();
         $treatment = Treatment::where('id', $treatment)->first();
@@ -67,7 +66,8 @@ class AppointmentController extends Controller
             "treatment_id"=>$treatment['id'],
             "survey_id"=>$survey['id'],
             "date"=>$date,
-            "time"=>$time,
+            "start_time"=>$time,
+            "end_time"=>date('H:i:s', strtotime($time . ' + ' . $treatment['duration'] .' hours')),
             "type"=>$type,
             "status"=>$status['id']
         ];
@@ -89,12 +89,36 @@ class AppointmentController extends Controller
     public function show($id)
     {
         try {
-            $appointment = Appointment::where('id', $id)->first();
-            $data = $this->appmtData($appointment);
-            return response()->json($data, 200);
+            $appointment = Appointment::where('patient_id', $id)->get();
+            if(sizeof($appointment)>1){
+                $response = [];
+                foreach ($appointment as $app) {
+                    $data = $this->appmtData($app);
+                    array_push($response, $data);
+                }
+                return response()->json($response, 200);
+            }else{
+                return response()->json($appointment, 200);
+            }
         } catch (\Throwable $th) {
             return response( $e, 500 );
         }
+    }
+
+    public function unavailability($date){
+        $data = Appointment::where('date', $date)->get();
+        $response=[];
+        foreach ($data as $appointment) {
+            $treatment = Treatment::where('id', $appointment['treatment_id'])->first();
+            $duration = $treatment['duration'];
+            for ($i=0; $i <= $duration; $i++) {
+                array_push($response, date('H:i:s', strtotime($appointment['start_time'] . ' + ' . $i .' hours')));
+            }
+        }
+        return response()->json([
+            "Unavailable Dates" => $response
+            ],
+            200);
     }
 
 
@@ -135,12 +159,15 @@ class AppointmentController extends Controller
     public function destroy($id)
     {
         $appointment = Appointment::find( $id );
+        $survey = Survey::where('appointment_date', $appointment['date'] )->first();
         if ( !$appointment ) {
             return response()->json( ['Error' => "Appointment with id " . $id . " doesn't exist"], 404 );
         }
 
         try {
             $delete = $appointment->delete();
+            $delete = $survey->delete();
+
         } catch ( \Throwable $e ) {
             return response()->json( $e, 500 );
         }
@@ -150,5 +177,6 @@ class AppointmentController extends Controller
                 'message' => 'Appointment with id ' . $id . ' has been deleted',
             ],
         ] );
+
     }
 }
