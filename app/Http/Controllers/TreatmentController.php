@@ -25,9 +25,11 @@ class TreatmentController extends Controller
             $tratamientosArray[] = [
                 'id' => $tratamiento->id,
                 'name' => $tratamiento->name,
-                'duration' => $tratamiento->duration,
-                'protocols' => $tratamiento->protocols,
                 'description' => $tratamiento->description,
+                'protocols' => $tratamiento->protocols,
+                'cost' => $tratamiento->cost,
+                'duration' => $tratamiento->duration,
+                'image-url' => $tratamiento['image-url'],
             ];
         }
 
@@ -40,9 +42,11 @@ class TreatmentController extends Controller
         // Validar los datos enviados por el formulario
         $data = $request->validate([
             'name' => 'required|string|max:255',
-            'duration' => 'required|integer|min:1',
-            'protocols' => 'required|in:Ninguno',
             'description' => 'nullable|string',
+            'protocols' => 'required|in:Ninguno',
+            'cost' => 'nullable|integer',
+            'duration' => 'required|integer|min:1',
+            'image-url' => "nullable|string",
         ]);
 
         // Crear un nuevo tratamiento sin asociarlo al usuario
@@ -78,10 +82,12 @@ class TreatmentController extends Controller
 
         // Valida los datos del formulario enviado.
         $validatedData = $request->validate([
-            'duration' => 'required|integer',
-            'name' => 'required|string',
+            'name' => 'required|string|max:255',
+            'description' => 'nullable|string',
             'protocols' => 'required|in:Ninguno',
-            'description' => 'required|string',
+            'cost' => 'nullable|integer',
+            'duration' => 'required|integer|min:1',
+            'image-url' => "nullable|string",
         ]);
 
         // Actualiza los atributos del modelo "treatment" con los datos validados.
