@@ -14,7 +14,8 @@ class Treatment extends Model
         'description',
         'protocols',
         'cost',
-        'duration'
+        'duration',
+        'image-url'
     ];
     public function treatments()
     {
