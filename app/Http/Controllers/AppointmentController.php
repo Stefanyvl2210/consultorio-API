@@ -118,8 +118,9 @@ class AppointmentController extends Controller
                 array_push($response, date('H:i:s', strtotime($appointment['start_time'] . ' + ' . $i .' hours')));
             }
         }
+
         return response()->json([
-            "unavailable_dates" => $response
+            "unavailable_dates" => array_unique($response)
             ],
             200);
     }
