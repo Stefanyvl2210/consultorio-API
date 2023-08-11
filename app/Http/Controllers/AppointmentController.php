@@ -78,13 +78,8 @@ class AppointmentController extends Controller
             "status"=>'Pendiente',
             "survey_id"=>$survey['id']
         ];
-        $existing = Appointment::where('date', $response['date'])->where('start_time', $response['start_time'])->first();
         try {
-            if(!isset($existing)){
-                $appointment = Appointment::create( $response );
-            }else{
-                return response()->json("HORA DEL DIA YA FUE RESERVADA", 200);
-            }
+            $appointment = Appointment::create( $response );
         } catch ( \Throwable $e ) {
             return response( $e );
         }
