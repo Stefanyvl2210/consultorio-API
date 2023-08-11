@@ -35,6 +35,7 @@ class AppointmentController extends Controller
     }
 
     public function appmtData($appointment){
+        $data['id']=$appointment['id'];
         $data['patient']=User::where('id', $appointment['patient_id'])->first()['first_name']. " ";
         $data['patient'].=User::where('id', $appointment['patient_id'])->first()['last_name'];
         $data['doctor']=User::where('id', $appointment['doctor_id'])->first()['first_name'] . " ";
@@ -85,7 +86,7 @@ class AppointmentController extends Controller
                 return response()->json("HORA DEL DIA YA FUE RESERVADA", 200);
             }
         } catch ( \Throwable $e ) {
-            return response( $e, 500 );
+            return response( $e );
         }
         return response()->json($appointment, 200);
     }
