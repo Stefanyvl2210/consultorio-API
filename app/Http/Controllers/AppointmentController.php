@@ -122,7 +122,7 @@ class AppointmentController extends Controller
             }
         }
         return response()->json([
-            "Unavailable Dates" => $response
+            "unavailable_dates" => $response
             ],
             200);
     }
