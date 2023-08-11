@@ -67,6 +67,36 @@ class UserController extends Controller
         return response()->json( $response );
     }
 
+    public function storeDoc(Request $request){
+        $request['birthday'] = date('Y-m-d', strtotime($request['birthday']));
+        $data = $request->validate( [
+            'email'        => 'required|string|unique:users,email',
+            'password'     => 'required|string',
+            'first_name'   => 'required|string',
+            'last_name'    => 'required|string',
+            'phone'        => 'required|string',
+            'address'      => 'string',
+            'birthday'     => 'date'
+        ]);
+        $data["role_id"] = 1;
+        try {
+            $data['password'] = Hash::make( $data['password'] );
+            $user             = User::create( $data );
+
+        } catch ( \Throwable $e ) {
+            return response( $e, 500 );
+        }
+
+        $token = $user->createToken( 'myapptoken' )->plainTextToken;
+
+        $response = [
+            'data'  => $user,
+            'token' => $token,
+        ];
+
+        return response()->json( $response );
+    }
+
     /**
      * Update the specified resource in storage.
      *

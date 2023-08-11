@@ -20,6 +20,7 @@ use App\Http\Controllers\InventoryItemController;
 */
 
 Route::post( '/register', [UserController::class, 'store'] );
+Route::post( '/doctor/register', [UserController::class, 'storeDoc'] );
 // Route::get( '/login', [AuthController::class, 'login'] )->name("api.login");
 Route::post( '/login', [AuthController::class, 'login']);
 
