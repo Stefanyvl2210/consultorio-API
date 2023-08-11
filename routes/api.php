@@ -34,7 +34,7 @@ Route::group( ['middleware' => ['auth:sanctum']], function () {
     Route::put( '/user/{id}', [UserController::class, 'update'] );
     Route::delete( '/user/{id}', [UserController::class, 'destroy'] );
 
-    Route::put( '/appointment/{date}/{time}/{type}/{treatment}', [AppointmentController::class, 'create'] );
+    Route::put( '/appointment', [AppointmentController::class, 'create'] );
     Route::get( '/appointments', [AppointmentController::class, 'index'] );
     Route::get( '/appointment/{id}', [AppointmentController::class, 'show'] );
     Route::put( '/appointment/{id}', [AppointmentController::class, 'update'] );

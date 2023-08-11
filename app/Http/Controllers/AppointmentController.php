@@ -53,27 +53,34 @@ class AppointmentController extends Controller
      *
      * @return \Illuminate\Http\Response
      */
-    public function create($date, $time, $type, $treatment)
+    public function create(Request $request)
     {
-        $survey=Survey::create(["appointment_date"=>$date, "", false]);
-        $treatment = Treatment::where('id', $treatment)->first();
+        $data = $request->validate([
+            'date'    => 'string',
+            'time' => 'string',
+            'type'    => 'string',
+            'treatment' => 'integer',
+
+        ]);
+        $survey=Survey::create(["appointment_date"=>$data['date'], "", false]);
+        $treatment = Treatment::where('id', $data['treatment'])->first();
         $user = auth()->user();
         $doctor = User::where('role_id',1)->first();
-        $data=[
+        $response=[
             "patient_id"=>$user['id'],
             "doctor_id"=>$doctor['id'],
             "treatment_id"=>$treatment['id'],
-            "date"=>$date,
-            "start_time"=>$time,
-            "end_time"=>date('H:i:s', strtotime($time . ' + ' . $treatment['duration'] .' hours')),
-            "type"=>$type,
+            "date"=>$data['date'],
+            "start_time"=>$data['time'],
+            "end_time"=>date('H:i:s', strtotime($data['time'] . ' + ' . $treatment['duration'] .' hours')),
+            "type"=>$data['type'],
             "status"=>'Pendiente',
             "survey_id"=>$survey['id']
         ];
-        $existing = Appointment::where('date', $data['date'])->where('start_time', $data['start_time'])->first();
+        $existing = Appointment::where('date', $response['date'])->where('start_time', $response['start_time'])->first();
         try {
             if(!isset($existing)){
-                $appointment = Appointment::create( $data );
+                $appointment = Appointment::create( $response );
             }else{
                 return response()->json("HORA DEL DIA YA FUE RESERVADA", 200);
             }
