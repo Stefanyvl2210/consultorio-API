@@ -58,7 +58,8 @@ class AppointmentController extends Controller
     {
         $data = $request->validate([
             'date'    => 'string',
-            'time' => 'string',
+            'start_time' => 'string',
+            'end_time' => 'string',
             'type'    => 'string',
             'treatment' => 'integer',
 
@@ -72,8 +73,8 @@ class AppointmentController extends Controller
             "doctor_id"=>$doctor['id'],
             "treatment_id"=>$treatment['id'],
             "date"=>$data['date'],
-            "start_time"=>$data['time'],
-            "end_time"=>date('H:i:s', strtotime($data['time'] . ' + ' . $treatment['duration'] .' hours')),
+            "start_time"=>$data['start_time'],
+            "end_time"=>$data['end_time'],
             "type"=>$data['type'],
             "status"=>'Pendiente',
             "survey_id"=>$survey['id']
