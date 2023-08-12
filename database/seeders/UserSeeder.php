@@ -21,6 +21,7 @@ class UserSeeder extends Seeder
         User::create([
             'email'=>'neiramon@hotmail.com',
             'password'=> Hash::make('123456'),
+            'image-profile' => null,
             'first_name'=>'Neira',
             'last_name'=>'Moncada',
             'address'=>'Barrio Obrero',

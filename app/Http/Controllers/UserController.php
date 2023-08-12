@@ -42,7 +42,7 @@ class UserController extends Controller
         $data = $request->validate( [
             'email'        => 'required|string|unique:users,email',
             'password'     => 'required|string',
-            'image-profile'     => 'required|string',
+            'image-profile'=> 'nullable|string',
             'first_name'   => 'required|string',
             'last_name'    => 'required|string',
             'phone'        => 'required|string',
@@ -73,7 +73,7 @@ class UserController extends Controller
         $data = $request->validate( [
             'email'        => 'required|string|unique:users,email',
             'password'     => 'required|string',
-            'image-profile'     => 'required|string',
+            'image-profile'=> 'nullable|string',
             'first_name'   => 'required|string',
             'last_name'    => 'required|string',
             'phone'        => 'required|string',
