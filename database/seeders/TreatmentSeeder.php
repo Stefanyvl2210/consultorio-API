@@ -91,8 +91,7 @@ class TreatmentSeeder extends Seeder
 
         Treatment::create([
             'name'=>'Ultrasonido',
-            'description'=>"
-            El ultrasonido es un procedimiento médico que utiliza ondas sonoras de alta frecuencia para crear imágenes del interior del cuerpo. Las ondas sonoras se transmiten a través de la piel y se reflejan en los órganos y tejidos internos. El eco de las ondas sonoras se recoge por un transductor y se convierte en una imagen en una pantalla.",
+            'description'=>"El ultrasonido es un procedimiento médico que utiliza ondas sonoras de alta frecuencia para crear imágenes del interior del cuerpo. Las ondas sonoras se transmiten a través de la piel y se reflejan en los órganos y tejidos internos. El eco de las ondas sonoras se recoge por un transductor y se convierte en una imagen en una pantalla.",
             'protocols'=>"No atender la cita con agresiones Virales (Gripe, Ciclo Menstrual, Sintomas virales, entre otros)",
             'cost'=>$fake->numberBetween($min = 10, $max = 100),
             'duration'=>$fake->numberBetween($min=1, $max=3),

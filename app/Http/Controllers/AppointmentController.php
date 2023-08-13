@@ -46,6 +46,7 @@ class AppointmentController extends Controller
         $data['end_time']=$appointment['end_time'];
         $data['type']=$appointment['type'];
         $data['status']=$appointment['status'];
+        $data['survey']=Survey::where('id', $appointment['survey_id'])->first();
         return $data;
     }
 
