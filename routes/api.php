@@ -21,7 +21,6 @@ use App\Http\Controllers\InventoryItemController;
 
 Route::post( '/register', [UserController::class, 'store'] );
 Route::post( '/doctor/register', [UserController::class, 'storeDoc'] );
-// Route::get( '/login', [AuthController::class, 'login'] )->name("api.login");
 Route::post( '/login', [AuthController::class, 'login']);
 
 Route::group( ['middleware' => ['auth:sanctum']], function () {
@@ -45,6 +44,7 @@ Route::group( ['middleware' => ['auth:sanctum']], function () {
     Route::get('/surveys', [SurveyController::class, 'index']);
     Route::get('/survey/{id}', [SurveyController::class, 'show']);
     Route::put('/survey/{id}', [SurveyController::class, 'update']);
+    
     // Nuevas rutas para manejar tratamientos e insumos médicos
     Route::resource('treatments', TreatmentController::class);
     Route::resource('inventory', InventoryItemController::class);
