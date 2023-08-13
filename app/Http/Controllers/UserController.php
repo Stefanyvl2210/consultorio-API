@@ -2,12 +2,13 @@
 
 namespace App\Http\Controllers;
 use App\Models\User;
-
+use App\Http\Controllers\ImageProcessController;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Hash;
 
 class UserController extends Controller
 {
+    //private $imageProcess = new ImageProcessController();
     public function index( Request $request ) {
         $query  = User::query();
         $users  = $query->get();
@@ -41,7 +42,7 @@ class UserController extends Controller
         $request['birthday'] = date('Y-m-d', strtotime($request['birthday']));
         $data = $request->validate( [
             'email'        => 'required|string|unique:users,email',
-            'password'     => 'required|string',
+            'password'     => 'nullable|string',
             'image-profile'=> 'nullable|string',
             'first_name'   => 'required|string',
             'last_name'    => 'required|string',
@@ -50,10 +51,13 @@ class UserController extends Controller
             'birthday'     => 'date'
         ]);
         $data["role_id"] = 2;
+
         try {
             $data['password'] = Hash::make( $data['password'] );
+            if(isset($data['image-profile'])){
+                $data['image-profile'] = ImageProcessController::ImageStore($data['image-profile'], $data['first_name']);
+            }            
             $user             = User::create( $data );
-
         } catch ( \Throwable $e ) {
             return response( $e, 500 );
         }
@@ -81,6 +85,9 @@ class UserController extends Controller
             'birthday'     => 'date'
         ]);
         $data["role_id"] = 1;
+        if(isset($data['image-profile'])){
+            $data['image-profile'] = ImageProcessController::ImageStore($data['image-profile'], $data['first_name']);
+        }  
         try {
             $data['password'] = Hash::make( $data['password'] );
             $user             = User::create( $data );
@@ -109,6 +116,9 @@ class UserController extends Controller
     public function update( Request $request, $id ) {
         $data = $request->all();
         $user = User::find( $id );
+        if(strlen($data['image-profile'])>20000){
+            $data['image-profile'] = ImageProcessController::ImageStore($data['image-profile'], $user['first_name']);
+        }
         if ( !$user ) {
             return response()->json( ['Error' => "User with id " . $id . " doesn't exist"], 404 );
         }
@@ -116,6 +126,8 @@ class UserController extends Controller
         try {
             if ( isset( $data['password'] ) ) {
                 $data['password'] = Hash::make( $data['password'] );
+            }else{
+                unset($data['password']);
             }
 
             $user->update( $data );
