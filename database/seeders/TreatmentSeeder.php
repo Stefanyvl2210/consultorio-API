@@ -18,6 +18,14 @@ class TreatmentSeeder extends Seeder
     {
         $fake = Faker::create();
         Treatment::create([
+            'name'=>'No Laboral',
+            'description'=>"",
+            'protocols'=>"",
+            'cost'=>0,
+            'duration'=>0,
+            'image-url'=> ""
+        ]);
+        Treatment::create([
             'name'=>'Botox',
             'description'=>"Tratamiento antienvejicimiento, neurotoxina biologica que elimina las arrugas o lineas de expresion. Procedimiento minimamente invasivo",
             'protocols'=>"No atender la cita con agresiones Virales (Gripe, Ciclo Menstrual, Sintomas virales, entre otros)",

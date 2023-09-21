@@ -22,15 +22,17 @@ class TreatmentController extends Controller
 
         // Recorrer cada tratamiento y agregar sus datos al array
         foreach ($tratamientos as $tratamiento) {
-            $tratamientosArray[] = [
-                'id' => $tratamiento->id,
-                'name' => $tratamiento->name,
-                'description' => $tratamiento->description,
-                'protocols' => $tratamiento->protocols,
-                'cost' => $tratamiento->cost,
-                'duration' => $tratamiento->duration,
-                'image-url' => $tratamiento['image-url'],
-            ];
+            if($tratamiento->id > 1){
+                $tratamientosArray[] = [
+                    'id' => $tratamiento->id,
+                    'name' => $tratamiento->name,
+                    'description' => $tratamiento->description,
+                    'protocols' => $tratamiento->protocols,
+                    'cost' => $tratamiento->cost,
+                    'duration' => $tratamiento->duration,
+                    'image-url' => $tratamiento['image-url'],
+                ];
+            }
         }
 
         // Retornar el array con todos los tratamientos

@@ -73,8 +73,8 @@ class AppointmentController extends Controller
             $response=[
                 "patient_id"=>$user['id'],
                 "doctor_id"=>$user['id'],
-                "treatment_id"=>$treatment['id'],
-                "date"=>date("Y-m-d H:i:s"),
+                "treatment_id"=>1,
+                "date"=>$data['date'],
                 "start_time"=>$data['start_time'],
                 "end_time"=>$data['end_time'],
                 "type"=>$data['type'],
