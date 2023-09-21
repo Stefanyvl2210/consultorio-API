@@ -61,6 +61,16 @@ class SurveyController extends Controller
         }
     }
 
+    public function getQuestions(){
+        return response()->json([
+            "Pregunta 1" => 'si',
+            "Pregunta 2" => 'no',
+            "Pregunta 3" => 'no',
+            "Pregunta 4" => 'si',
+            "Pregunta 5" => 'no'
+        ], 200);
+    }
+
     /**
      * Show the form for editing the specified resource.
      *
@@ -84,7 +94,7 @@ class SurveyController extends Controller
         $data = $request->all();
         $survey = Survey::find( $id );
         if ( !$survey ) {
-            return response()->json( ['Error' => "Survet with id " . $id . " doesn't exist"], 404 );
+            return response()->json( ['Error' => "Survey with id " . $id . " doesn't exist"], 404 );
         }
 
         try {
