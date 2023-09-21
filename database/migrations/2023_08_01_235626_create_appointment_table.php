@@ -21,7 +21,7 @@ return new class extends Migration
             $table->date('date');
             $table->time('start_time');
             $table->time('end_time');
-            $table->enum('type', ['Cita Previa', 'Cita Formal'])->nullable();
+            $table->enum('type', ['Cita Previa', 'Cita Formal', 'No Laboral'])->nullable();
             $table->enum('status', ['Pendiente', 'Aceptada', 'Rechazada', 'Cancelada'])->default('Pendiente');
             $table->foreignId('survey_id')->constrained('survey');
             $table->timestamps();

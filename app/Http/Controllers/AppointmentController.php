@@ -69,17 +69,31 @@ class AppointmentController extends Controller
         $treatment = Treatment::where('id', $data['treatment'])->first();
         $user = auth()->user();
         $doctor = User::where('role_id',1)->first();
-        $response=[
-            "patient_id"=>$user['id'],
-            "doctor_id"=>$doctor['id'],
-            "treatment_id"=>$treatment['id'],
-            "date"=>$data['date'],
-            "start_time"=>$data['start_time'],
-            "end_time"=>$data['end_time'],
-            "type"=>$data['type'],
-            "status"=>'Pendiente',
-            "survey_id"=>$survey['id']
-        ];
+        if($data['type'] == "No Laboral" && $user['role_id'] == 1){ 
+            $response=[
+                "patient_id"=>$user['id'],
+                "doctor_id"=>$user['id'],
+                "treatment_id"=>$treatment['id'],
+                "date"=>date("Y-m-d H:i:s"),
+                "start_time"=>$data['start_time'],
+                "end_time"=>$data['end_time'],
+                "type"=>$data['type'],
+                "status"=>'Aceptada',
+                "survey_id"=>$survey['id']
+            ];
+        }else{
+            $response=[
+                "patient_id"=>$user['id'],
+                "doctor_id"=>$doctor['id'],
+                "treatment_id"=>$treatment['id'],
+                "date"=>$data['date'],
+                "start_time"=>$data['start_time'],
+                "end_time"=>$data['end_time'],
+                "type"=>$data['type'],
+                "status"=>'Pendiente',
+                "survey_id"=>$survey['id']
+            ];
+        }
         try {
             $appointment = Appointment::create( $response );
         } catch ( \Throwable $e ) {
