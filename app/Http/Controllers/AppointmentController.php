@@ -127,8 +127,14 @@ class AppointmentController extends Controller
         $data = Appointment::where('date', $date)->get();
         $response=[];
         foreach ($data as $appointment) {
-            $treatment = Treatment::where('id', $appointment['treatment_id'])->first();
-            $duration = $treatment['duration'];
+            if($appointment['type']=='No Laboral'){
+                $starttimestamp = strtotime($appointment['start_time']);
+                $endtimestamp = strtotime($appointment['end_time']);
+                $duration = abs($endtimestamp - $starttimestamp)/3600;
+            }else{
+                $treatment = Treatment::where('id', $appointment['treatment_id'])->first();
+                $duration = $treatment['duration'];
+            }
             for ($i=0; $i <= $duration; $i++) {
                 array_push($response, date('H:i:s', strtotime($appointment['start_time'] . ' + ' . $i .' hours')));
             }
@@ -139,6 +145,8 @@ class AppointmentController extends Controller
             ],
             200);
     }
+
+
 
 
     /**
@@ -178,7 +186,7 @@ class AppointmentController extends Controller
     public function destroy($id)
     {
         $appointment = Appointment::find( $id );
-        $survey = Survey::where('appointment_date', $appointment['date'] )->first();
+        $survey = Survey::where('created_at', $appointment['date'] )->first();
         if ( !$appointment ) {
             return response()->json( ['Error' => "Appointment with id " . $id . " doesn't exist"], 404 );
         }
