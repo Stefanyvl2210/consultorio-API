@@ -63,11 +63,27 @@ class SurveyController extends Controller
 
     public function getQuestions(){
         return response()->json([
-            "Pregunta 1" => 'si',
-            "Pregunta 2" => 'no',
-            "Pregunta 3" => 'no',
-            "Pregunta 4" => 'si',
-            "Pregunta 5" => 'no'
+            
+            [
+                "Pregunta 1",
+                ''
+            ],
+            [
+                "Pregunta 2",
+                ''
+            ],
+            [
+                "Pregunta 3",
+                ''
+            ],
+            [
+                "Pregunta 4",
+                ''
+            ],
+            [
+                "Pregunta 5",
+                ''
+            ],
         ], 200);
     }
 
@@ -98,7 +114,12 @@ class SurveyController extends Controller
         }
 
         try {
-            $survey->update( $data );
+            $answers = "";
+            foreach ($data as $answer) {
+                $answers .= $answer[1] . ",";   
+            }
+            $survey->results = $answers;
+            $survey->save();
         } catch ( \Throwable $e ) {
             return response()->json( $e, 500 );
         }
