@@ -8,7 +8,6 @@ use Illuminate\Http\Response;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Auth;
 
-
 class AuthController extends Controller
 {
     public function login( Request $request ) {
@@ -25,7 +24,7 @@ class AuthController extends Controller
             ], 401 );
         }
         $token = $user->createToken( 'myapptoken' )->plainTextToken;
-        
+
         return response()->json( [
             'data' => [
                 'user'  => $user,

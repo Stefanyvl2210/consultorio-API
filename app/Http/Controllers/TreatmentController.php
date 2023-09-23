@@ -45,7 +45,7 @@ class TreatmentController extends Controller
         $data = $request->validate([
             'name' => 'required|string|max:255',
             'description' => 'nullable|string',
-            'protocols' => 'required|in:Ninguno',
+            'protocols' => 'required|string',
             'cost' => 'nullable|integer',
             'duration' => 'required|integer|min:1',
             'image-url' => "nullable|string",
