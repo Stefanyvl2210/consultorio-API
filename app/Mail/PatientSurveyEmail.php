@@ -9,6 +9,10 @@ use Illuminate\Mail\Mailables\Content;
 use Illuminate\Mail\Mailables\Envelope;
 use Illuminate\Queue\SerializesModels;
 
+use Carbon\Carbon;
+use App\Models\User;
+use App\Models\Treatment;
+
 class PatientSurveyEmail extends Mailable
 {
     use Queueable, SerializesModels;
