@@ -48,7 +48,8 @@ class InventoryItemController extends Controller
         ]);
 
         $inventoryItem = InventoryItem::create($validatedData);
-        return response()->json(['data' => $inventoryItem], Response::HTTP_CREATED);
+        return response()->json($inventoryItem, 201);
+
     }
 
     /**
@@ -98,9 +99,7 @@ class InventoryItemController extends Controller
         // Actualiza los atributos del modelo "InventoryItem" con los datos validados.
         $inventoryItem->update($validatedData);
 
-        // Redirecciona a la página de detalles del tratamiento actualizado.
-        return redirect()->route('inventory.show', ['inventory' => $inventoryItem->id])
-            ->with('success', 'Item updated successfully.');
+        return response()->json($inventoryItem);
 
     }
 
@@ -121,7 +120,7 @@ class InventoryItemController extends Controller
 
         $inventoryItem->delete();
 
-        return redirect()->route('inventory.index')
-            ->with('success', 'Item successfully removed.');
+        return response()->json(["message" => "Item deleted successfully"], 200);
+        
     }
 }
