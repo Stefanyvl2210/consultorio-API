@@ -72,23 +72,23 @@ class SurveyController extends Controller
     public function getQuestions(){
         return response()->json([
             (object)[
-                'question'=> "Pregunta 1",
+                'question'=> "¿Ha presentado sintomas (dolor, enrojecimiento, inflamacion)?",
                 'answer'=> ''
             ],
             (object)[
-                'question'=> "Pregunta 2",
+                'question'=> "¿Ha seguido las recomendaciones post-tratamiento como lo indicado?",
                 'answer'=> ''
             ],
             (object)[
-                'question'=> "Pregunta 3",
+                'question'=> "¿Se siente conforme con la evolucion posterior al tratamiento?",
                 'answer'=> ''
             ],
             (object)[
-                'question'=> "Pregunta 4",
+                'question'=> "¿Repetiria el tratamiento efectuado con la doctora?",
                 'answer'=> ''
             ],
             (object)[
-                'question'=> "Pregunta 5",
+                'question'=> "¿Recomendarias el procedimiento a algun allegado?",
                 'answer'=> ''
             ]
         ], 200);
