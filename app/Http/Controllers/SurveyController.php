@@ -61,6 +61,32 @@ class SurveyController extends Controller
         }
     }
 
+    public function getQuestions(){
+        return response()->json([
+            
+            [
+                "Pregunta 1",
+                ''
+            ],
+            [
+                "Pregunta 2",
+                ''
+            ],
+            [
+                "Pregunta 3",
+                ''
+            ],
+            [
+                "Pregunta 4",
+                ''
+            ],
+            [
+                "Pregunta 5",
+                ''
+            ],
+        ], 200);
+    }
+
     /**
      * Show the form for editing the specified resource.
      *
@@ -84,11 +110,16 @@ class SurveyController extends Controller
         $data = $request->all();
         $survey = Survey::find( $id );
         if ( !$survey ) {
-            return response()->json( ['Error' => "Survet with id " . $id . " doesn't exist"], 404 );
+            return response()->json( ['Error' => "Survey with id " . $id . " doesn't exist"], 404 );
         }
 
         try {
-            $survey->update( $data );
+            $answers = "";
+            foreach ($data as $answer) {
+                $answers .= $answer[1] . ",";   
+            }
+            $survey->results = $answers;
+            $survey->save();
         } catch ( \Throwable $e ) {
             return response()->json( $e, 500 );
         }

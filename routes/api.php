@@ -42,6 +42,7 @@ Route::group( ['middleware' => ['auth:sanctum']], function () {
     Route::get( '/unavailability/{date}', [AppointmentController::class, 'unavailability'] );
 
     Route::get('/surveys', [SurveyController::class, 'index']);
+    Route::get('/surveys/questions', [SurveyController::class, 'getQuestions']);
     Route::get('/survey/{id}', [SurveyController::class, 'show']);
     Route::put('/survey/{id}', [SurveyController::class, 'update']);
     

@@ -65,21 +65,35 @@ class AppointmentController extends Controller
             'treatment' => 'integer',
 
         ]);
-        $survey=Survey::create(["", false]);
+        $survey=Survey::create(["", 'pendiente']);
         $treatment = Treatment::where('id', $data['treatment'])->first();
         $user = auth()->user();
         $doctor = User::where('role_id',1)->first();
-        $response=[
-            "patient_id"=>$user['id'],
-            "doctor_id"=>$doctor['id'],
-            "treatment_id"=>$treatment['id'],
-            "date"=>$data['date'],
-            "start_time"=>$data['start_time'],
-            "end_time"=>$data['end_time'],
-            "type"=>$data['type'],
-            "status"=>'Pendiente',
-            "survey_id"=>$survey['id']
-        ];
+        if($data['type'] == "No Laboral" && $user['role_id'] == 1){ 
+            $response=[
+                "patient_id"=>$user['id'],
+                "doctor_id"=>$user['id'],
+                "treatment_id"=>1,
+                "date"=>$data['date'],
+                "start_time"=>$data['start_time'],
+                "end_time"=>$data['end_time'],
+                "type"=>$data['type'],
+                "status"=>'Aceptada',
+                "survey_id"=>$survey['id']
+            ];
+        }else{
+            $response=[
+                "patient_id"=>$user['id'],
+                "doctor_id"=>$doctor['id'],
+                "treatment_id"=>$treatment['id'],
+                "date"=>$data['date'],
+                "start_time"=>$data['start_time'],
+                "end_time"=>$data['end_time'],
+                "type"=>$data['type'],
+                "status"=>'Pendiente',
+                "survey_id"=>$survey['id']
+            ];
+        }
         try {
             $appointment = Appointment::create( $response );
         } catch ( \Throwable $e ) {
@@ -113,8 +127,14 @@ class AppointmentController extends Controller
         $data = Appointment::where('date', $date)->get();
         $response=[];
         foreach ($data as $appointment) {
-            $treatment = Treatment::where('id', $appointment['treatment_id'])->first();
-            $duration = $treatment['duration'];
+            if($appointment['type']=='No Laboral'){
+                $starttimestamp = strtotime($appointment['start_time']);
+                $endtimestamp = strtotime($appointment['end_time']);
+                $duration = abs($endtimestamp - $starttimestamp)/3600;
+            }else{
+                $treatment = Treatment::where('id', $appointment['treatment_id'])->first();
+                $duration = $treatment['duration'];
+            }
             for ($i=0; $i <= $duration; $i++) {
                 array_push($response, date('H:i:s', strtotime($appointment['start_time'] . ' + ' . $i .' hours')));
             }
@@ -125,6 +145,8 @@ class AppointmentController extends Controller
             ],
             200);
     }
+
+
 
 
     /**
@@ -164,7 +186,7 @@ class AppointmentController extends Controller
     public function destroy($id)
     {
         $appointment = Appointment::find( $id );
-        $survey = Survey::where('appointment_date', $appointment['date'] )->first();
+        $survey = Survey::where('created_at', $appointment['date'] )->first();
         if ( !$appointment ) {
             return response()->json( ['Error' => "Appointment with id " . $id . " doesn't exist"], 404 );
         }
