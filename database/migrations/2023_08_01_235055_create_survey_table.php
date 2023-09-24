@@ -16,7 +16,8 @@ return new class extends Migration
         Schema::create('survey', function (Blueprint $table) {
             $table->id();
             $table->string('results', 200)->nullable();
-            $table->enum('status', ['pendiente', 'completada'])->default('pendiente');
+            $table->enum('status', ['Pendiente', 'Disponible', 'Completada'])->default('Pendiente');
+            $table->timestamps();
         });
     }
 

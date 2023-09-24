@@ -60,8 +60,6 @@
         </div>
 
         <div id="content">
-            <p>Estimado(a) {{ $patient->first_name }} {{ $patient->last_name }},</p>
-                <p>Recientemente tuvo una cita con Dr(a) {{ $doctor->first_name }} {{ $doctor->last_name }} sobre el tratamiento {{ $treatment->name }} el dia {{ ($appointment_date)->format('d/m/Y') }} en el horario de {{ ($appointment_start_time)->format('h:i A') }} a {{ $appointment_end_time->format('h:i A') }}.
             <p>Estimado {{ $patient->first_name }} {{ $patient->last_name }},</p>
             <p>Esperamos que te encuentres bien. Queremos asegurarnos de que tu tratamiento estético {{ $treatment->name }} realizado el día {{ ($appointment_date)->format('d/m/Y') }} en el horario de {{ ($appointment_start_time)->format('h:i A') }} a {{ $appointment_end_time->format('h:i A') }} con el especialista Dr(a). {{ $doctor->first_name }} {{ $doctor->last_name }} esté progresando de la mejor manera posible.</p>
             <p>Te invitamos a compartir tu experiencia y cualquier novedad en tu tratamiento completando nuestro breve formulario de seguimiento. Este paso es fundamental para garantizar que estés recibiendo la atención adecuada y que cualquier efecto secundario o situación inesperada se aborde de inmediato.</p>

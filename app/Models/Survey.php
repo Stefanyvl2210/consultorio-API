@@ -13,7 +13,6 @@ class Survey extends Model
         'appointment_date',
         'results',
         'status'
-
     ];
     public function appointments()
     {

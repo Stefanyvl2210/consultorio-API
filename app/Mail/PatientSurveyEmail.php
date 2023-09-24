@@ -35,7 +35,7 @@ class PatientSurveyEmail extends Mailable
     public function envelope()
     {
 
-        $subject = 'Actualización Importante sobre tu Tratamiento Estético ' . $this->treatment;
+        $subject = 'Actualización Importante sobre tu Tratamiento Estético ' . $this->treatment->name;
         return new Envelope(
             subject: $subject
         );

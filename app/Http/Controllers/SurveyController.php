@@ -127,6 +127,7 @@ class SurveyController extends Controller
                 $answers .= $answer[1] . ",";   
             }
             $survey->results = $answers;
+            $survey->status = 'Completada';
             $survey->save();
         } catch ( \Throwable $e ) {
             return response()->json( $e, 500 );
@@ -150,7 +151,7 @@ class SurveyController extends Controller
         $email = new DocSurveyEmail($doctor, $patient, $treatment, $appointment_date, $appointment_start_time, $appointment_end_time);
 
         // Mail::to($doctor->email)->send($email);
-        Mail::to('cristian.rosales@unet.edu.ve')->send($email);
+        Mail::to('emanuel.murillo@unet.edu.ve')->send($email);
         
         return response()->json( $response );
 
