@@ -12,7 +12,7 @@ class Survey extends Model
     protected $fillable = [
         'appointment_date',
         'results',
-        'need_checkup'
+        'status'
 
     ];
     public function appointments()
