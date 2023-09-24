@@ -116,7 +116,7 @@ class TreatmentController extends Controller
 
         $treatment->delete();
 
-        return response()->json("message: Treatment deleted successfully");
+        return response()->json(["message" => "Treatment deleted successfully"], 200);
     }
 
 }
