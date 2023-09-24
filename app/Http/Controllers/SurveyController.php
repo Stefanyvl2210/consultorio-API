@@ -84,7 +84,7 @@ class SurveyController extends Controller
                 'answer'=> ''
             ],
             (object)[
-                'question'=> "¿Repetiria el tratamiento efectuado con la doctora?",
+                'question'=> "¿El tratamiento cumplio con la expectativas esperadas por su persona?",
                 'answer'=> ''
             ],
             (object)[
