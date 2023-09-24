@@ -95,13 +95,13 @@ class TreatmentController extends Controller
         ]);
         if(isset($validatedData['image-url'])){
             $validatedData['image-url'] = ImageProcessController::ImageStore($validatedData['image-url'], $validatedData['name']);
+            $treatment['image-url'] = $validatedData['image-url'];
         }  
         // Actualiza los atributos del modelo "treatment" con los datos validados.
-        $treatment->update($validatedData);
+        $treatment->save($validatedData);
 
         // Redirecciona a la página de detalles del tratamiento actualizado.
-        return redirect()->route('treatments.show', ['treatment' => $treatment->id])
-            ->with('success', 'Treatment updated successfully.');
+        return response()->json($treatment);
     }
 
     public function destroy($id)
@@ -116,8 +116,7 @@ class TreatmentController extends Controller
 
         $treatment->delete();
 
-        return redirect()->route('treatments.index')
-            ->with('success', 'Treatment successfully removed.');
+        return response()->json("message: Treatment deleted successfully");
     }
 
 }
