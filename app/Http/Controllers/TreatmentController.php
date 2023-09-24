@@ -93,8 +93,8 @@ class TreatmentController extends Controller
             'duration' => 'required|integer|min:1',
             'image-url' => "nullable|string",
         ]);
-        if(isset($data['image-url'])){
-            $data['image-url'] = ImageProcessController::ImageStore($data['image-url'], $data['name']);
+        if(isset($validatedData['image-url'])){
+            $validatedData['image-url'] = ImageProcessController::ImageStore($validatedData['image-url'], $validatedData['name']);
         }  
         // Actualiza los atributos del modelo "treatment" con los datos validados.
         $treatment->update($validatedData);

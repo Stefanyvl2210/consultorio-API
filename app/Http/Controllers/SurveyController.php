@@ -71,27 +71,26 @@ class SurveyController extends Controller
 
     public function getQuestions(){
         return response()->json([
-            
-            [
-                "Pregunta 1",
-                ''
+            (object)[
+                'question'=> "Pregunta 1",
+                'answer'=> ''
             ],
-            [
-                "Pregunta 2",
-                ''
+            (object)[
+                'question'=> "Pregunta 2",
+                'answer'=> ''
             ],
-            [
-                "Pregunta 3",
-                ''
+            (object)[
+                'question'=> "Pregunta 3",
+                'answer'=> ''
             ],
-            [
-                "Pregunta 4",
-                ''
+            (object)[
+                'question'=> "Pregunta 4",
+                'answer'=> ''
             ],
-            [
-                "Pregunta 5",
-                ''
-            ],
+            (object)[
+                'question'=> "Pregunta 5",
+                'answer'=> ''
+            ]
         ], 200);
     }
 
@@ -123,8 +122,8 @@ class SurveyController extends Controller
 
         try {
             $answers = "";
-            foreach ($data as $answer) {
-                $answers .= $answer[1] . ",";   
+            foreach ($data as $info) {
+                $answers .= $info['answer'] . ",";   
             }
             $survey->results = $answers;
             $survey->status = 'Completada';
@@ -150,8 +149,8 @@ class SurveyController extends Controller
 
         $email = new DocSurveyEmail($doctor, $patient, $treatment, $appointment_date, $appointment_start_time, $appointment_end_time);
 
-        Mail::to($doctor->email)->send($email);
-        // Mail::to('cristian.rosales@unet.edu.ve')->send($email);
+        // Mail::to($doctor->email)->send($email);
+        Mail::to('emanuel.murillo@unet.edu.ve')->send($email);
         
         return response()->json( $response );
 
