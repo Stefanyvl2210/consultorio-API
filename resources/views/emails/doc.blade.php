@@ -42,6 +42,14 @@
             padding: 10px;
             text-align: center;
         }
+        #button {
+            background-color: #CE7777;
+            color: #fff;
+            padding: 10px 20px;
+            text-decoration: none;
+            border-radius: 5px;
+            display: inline-block;
+        }
     </style>
 </head>
 <body>
@@ -52,6 +60,7 @@
         <div class="content">
             <p>Estimado(a) {{ $doctor->first_name }} {{ $doctor->last_name }},</p>
             <p>Se le informa que su paciente {{ $patient->first_name }} {{ $patient->last_name }} ha completado la encuesta para el tratamiento {{ $treatment->name }} realizado el dia {{ ($appointment_date)->format('d/m/Y') }} en el horario de {{ ($appointment_start_time)->format('h:i A') }} a {{ $appointment_end_time->format('h:i A') }}.</p>
+            <p><a id="button" href="http://consultorio-api.test/appointments">Gestión de Citas</a></p>
         </div>
         <div class="footer">
             <p>© {{ date('Y') }} Dr(a). {{ $doctor->first_name }} {{ $doctor->last_name }}</p>
