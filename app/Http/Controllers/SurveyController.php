@@ -5,6 +5,14 @@ namespace App\Http\Controllers;
 use App\Models\Survey;
 use Illuminate\Http\Request;
 
+use App\Mail\DocSurveyEmail;
+use Illuminate\Support\Facades\Mail;
+use App\Models\Appointment;
+use App\Models\User;
+use App\Models\Treatment;
+use Carbon\Carbon;
+
+
 class SurveyController extends Controller
 {
     /**
@@ -30,8 +38,8 @@ class SurveyController extends Controller
      * @return \Illuminate\Http\Response
      */
     public function create()
-    {
-        //
+    {        
+
     }
 
     /**
@@ -42,7 +50,7 @@ class SurveyController extends Controller
      */
     public function store(Request $request)
     {
-        //
+        
     }
 
     /**
@@ -127,7 +135,23 @@ class SurveyController extends Controller
         $response = [
             'data' => $survey,
         ];
+        
+        //Envío de email al doctor
+        $appointment = Appointment::where('survey_id',$id)->first();
 
+        $appointment_date = Carbon::parse($appointment->date);
+        $appointment_start_time = Carbon::parse($appointment->start_time);
+        $appointment_end_time = Carbon::parse($appointment->end_time);
+
+        $doctor = User::find($appointment->doctor_id);
+        $patient = User::find($appointment->patient_id);
+        $treatment = Treatment::find($appointment->treatment_id);
+
+        $email = new DocSurveyEmail($doctor, $patient, $treatment, $appointment_date, $appointment_start_time, $appointment_end_time);
+
+        // Mail::to($doctor->email)->send($email);
+        Mail::to('cristian.rosales@unet.edu.ve')->send($email);
+        
         return response()->json( $response );
 
     }
