@@ -65,7 +65,7 @@ class AppointmentController extends Controller
             'treatment' => 'integer',
 
         ]);
-        $survey=Survey::create(["", false]);
+        $survey=Survey::create(["", 'pendiente']);
         $treatment = Treatment::where('id', $data['treatment'])->first();
         $user = auth()->user();
         $doctor = User::where('role_id',1)->first();
