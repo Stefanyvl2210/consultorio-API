@@ -50,7 +50,9 @@ class TreatmentController extends Controller
             'duration' => 'required|integer|min:1',
             'image-url' => "nullable|string",
         ]);
-
+        if(isset($data['image-url'])){
+            $data['image-url'] = ImageProcessController::ImageStore($data['image-url'], $data['name']);
+        }  
         // Crear un nuevo tratamiento sin asociarlo al usuario
         $tratamiento = Treatment::create($data);
 
